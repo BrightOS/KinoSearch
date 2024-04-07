@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true">
+
+            <ImageView
+                android:id="@+id/back_cover"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="TODO"
+                android:foreground="@drawable/background_cover_overlay"
+                android:scaleType="centerCrop"
+                android:src="@drawable/backdrop"
+                app:layout_constraintBottom_toBottomOf="@id/front_cover"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/front_cover" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/front_cover"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:paddingVertical="20dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/cover"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/RoundedImageView.10dp" />
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:paddingBottom="20dp"
+                android:src="@drawable/logo"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/back_cover"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/back_cover" />
+
+            <TextView
+                android:id="@+id/title_russian"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:fontFamily="@font/inter_semibold"
+                android:gravity="center"
+                android:text="Реинкарнация безработного: История о приключениях в другом мире"
+                android:textColor="?colorOnBackground"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/logo" />
+
+            <TextView
+                android:id="@+id/title_original"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Mushoku Tensei: Isekai Ittara Honki Dasu"
+                android:textColor="?colorOnBackground"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title_russian" />
+
+            <TextView
+                android:id="@+id/main_information"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="center"
+                android:text="2 сезона, 104 эп. по ~23 мин."
+                android:textColor="?colorOnBackground"
+                android:textSize="12sp"
+                app:layout_constraintTop_toBottomOf="@id/title_original" />
+
+            <TextView
+                android:id="@+id/country_and_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="center"
+                android:text="Япония, с 2021 г."
+                android:textColor="?colorOnBackground"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/main_information" />
+
+            <TextView
+                android:id="@+id/age_restriction"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/background_age"
+                android:backgroundTint="?colorOnPrimaryContainer"
+                android:fontFamily="@font/inter_semibold"
+                android:gravity="center"
+                android:paddingHorizontal="5dp"
+                android:text="18+"
+                android:textColor="?colorOnPrimary"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@id/tmdb"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/country_and_time" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tmdb"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="10dp"
+                app:cardCornerRadius="5dp"
+                app:layout_constraintBottom_toBottomOf="@id/age_restriction"
+                app:layout_constraintEnd_toStartOf="@id/imdb"
+                app:layout_constraintStart_toEndOf="@id/age_restriction"
+                app:layout_constraintTop_toTopOf="@id/age_restriction"
+                app:strokeColor="?colorOnPrimaryContainer">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingEnd="1dp">
+
+                    <TextView
+                        android:id="@+id/tmdb_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/background_age"
+                        android:backgroundTint="?colorOnPrimaryContainer"
+                        android:fontFamily="@font/inter_semibold"
+                        android:gravity="center"
+                        android:paddingHorizontal="5dp"
+                        android:text="8.5"
+                        android:textColor="?colorOnPrimary"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/country_and_time" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:fontFamily="@font/inter_semibold"
+                        android:gravity="center"
+                        android:paddingHorizontal="5dp"
+                        android:text="TMDb"
+                        android:textColor="?colorOnPrimaryContainer"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/imdb"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="10dp"
+                app:cardCornerRadius="5dp"
+                app:layout_constraintBottom_toBottomOf="@id/age_restriction"
+                app:layout_constraintEnd_toStartOf="@id/kp"
+                app:layout_constraintStart_toEndOf="@id/tmdb"
+                app:layout_constraintTop_toTopOf="@id/age_restriction"
+                app:strokeColor="?colorOnPrimaryContainer">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingEnd="1dp">
+
+                    <TextView
+                        android:id="@+id/imdb_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/background_age"
+                        android:backgroundTint="?colorOnPrimaryContainer"
+                        android:fontFamily="@font/inter_semibold"
+                        android:gravity="center"
+                        android:paddingHorizontal="5dp"
+                        android:text="8.5"
+                        android:textColor="?colorOnPrimary"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/country_and_time" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:fontFamily="@font/inter_semibold"
+                        android:gravity="center"
+                        android:paddingHorizontal="5dp"
+                        android:text="IMDb"
+                        android:textColor="?colorOnPrimaryContainer"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/kp"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                app:cardCornerRadius="5dp"
+                app:layout_constraintBottom_toBottomOf="@id/age_restriction"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imdb"
+                app:layout_constraintTop_toTopOf="@id/age_restriction"
+                app:strokeColor="?colorOnPrimaryContainer">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingEnd="1dp">
+
+                    <TextView
+                        android:id="@+id/kp_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/background_age"
+                        android:backgroundTint="?colorOnPrimaryContainer"
+                        android:fontFamily="@font/inter_semibold"
+                        android:gravity="center"
+                        android:paddingHorizontal="5dp"
+                        android:text="8.5"
+                        android:textColor="?colorOnPrimary"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/country_and_time" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:drawableTint="?colorOnPrimaryContainer"
+                        android:fontFamily="@font/inter_semibold"
+                        android:gravity="center"
+                        android:paddingHorizontal="5dp"
+                        android:text=""
+                        android:textColor="?colorOnPrimaryContainer"
+                        android:textSize="12sp"
+                        app:drawableStartCompat="@drawable/ic_kinopoisk" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="15dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/inter_regular"
+                android:maxLines="5"
+                android:text="34-летний безработный спасает группу подростков от смерти под колёсами грузовика, однако погибает сам. Он перерождается в волшебном мире под именем Рудеус Грейрат. Сохранив знания и опыт, он клянется вести полноценную жизнь и не повторять свои прошлые ошибки. Новые родители считают его, одаренного магической силой и разумом взрослого человека, гением, и вскоре Рудеус начинает учиться у могущественных воинов. Но, несмотря на его невинную внешность, парень по-прежнему извращенный отаку, который мечтает наконец начать встречаться с девушкой."
+                android:textColor="?colorOnBackground"
+                app:layout_constraintTop_toBottomOf="@id/age_restriction" />
+
+            <TextView
+                android:id="@+id/description_expand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="Показать больше"
+                android:textColor="?colorPrimary"
+                app:layout_constraintTop_toBottomOf="@id/description" />
+
+            <TextView
+                android:id="@+id/genre_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="Жанр"
+                android:textColor="?colorOnBackground"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/description_expand" />
+
+            <com.airbnb.epoxy.EpoxyRecyclerView
+                android:id="@+id/genre_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="17.5dp"
+                android:paddingVertical="5dp"
+                app:layout_constraintTop_toBottomOf="@id/genre_title"
+                tools:itemCount="1"
+                tools:listitem="@layout/item_genre" />
+
+            <TextView
+                android:id="@+id/seasons_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="Сезоны и серии"
+                android:textColor="?colorOnBackground"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/genre_recycler" />
+
+            <com.airbnb.epoxy.Carousel
+                android:id="@+id/seasons_carousel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="17.5dp"
+                android:paddingVertical="5dp"
+                app:layout_constraintTop_toBottomOf="@id/seasons_title"
+                tools:itemCount="1"
+                tools:listitem="@layout/item_season"/>
+
+            <TextView
+                android:id="@+id/actor_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="Актёры и съёмочная группа"
+                android:textColor="?colorOnBackground"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/seasons_carousel" />
+
+            <com.airbnb.epoxy.EpoxyRecyclerView
+                android:id="@+id/actor_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="17.5dp"
+                android:paddingVertical="2.5dp"
+                app:layout_constraintTop_toBottomOf="@id/actor_title"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_actor" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        style="@style/Widget.Material3.FloatingActionButton.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_arrow_back"
+        app:fabCustomSize="40dp" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
