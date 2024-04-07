@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -19,7 +21,18 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "API_BASE_URL", "https://api.kinopoisk.dev/v1.4/")
+        // Токен для API надо будет разместить в local.properties под названием "key"
+        buildConfigField(
+            type = "String",
+            name = "API_KEY",
+            value = gradleLocalProperties(rootDir, providers).getProperty("key")
+        )
+
+        buildConfigField(
+            type = "String",
+            name = "API_BASE_URL",
+            value = "\"https://api.kinopoisk.dev/v1.4/\""
+        )
     }
 
     buildTypes {
