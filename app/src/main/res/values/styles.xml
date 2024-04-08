@@ -20,4 +20,9 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">20dp</item>
     </style>
+
+    <style name="CircleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>
