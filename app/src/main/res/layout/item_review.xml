@@ -5,7 +5,7 @@
     style="@style/Widget.Material3.CardView.Filled"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="2.5dp"
+    android:layout_margin="5dp"
     app:cardCornerRadius="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,6 +17,7 @@
             android:layout_width="4dp"
             android:layout_height="0dp"
             android:background="#00FF00"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/review_photo"
             app:layout_constraintBottom_toBottomOf="@id/review_photo"/>
 
@@ -26,9 +27,10 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_height="0dp"
+            android:background="@drawable/background_age"
+            android:backgroundTint="?colorSurfaceContainerLow"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/actor"
+            android:src="@drawable/ic_person"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -69,6 +71,7 @@
             android:textColor="?colorOnSurface"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:lines="2"
             android:fontFamily="@font/inter_semibold"
             android:text="История рудеуса"
             app:layout_constraintTop_toBottomOf="@id/review_photo" />

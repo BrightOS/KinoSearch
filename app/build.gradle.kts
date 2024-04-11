@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.google.dagger.hilt)
     alias(libs.plugins.navigation.safe.args)
     alias(libs.plugins.google.devtools.ksp)
+    id("kotlin-kapt")
 }
 
 android {
@@ -14,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "ru.bashcony.kinosearch"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -33,6 +34,10 @@ android {
             name = "API_BASE_URL",
             value = "\"https://api.kinopoisk.dev/v1.4/\""
         )
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
@@ -73,6 +78,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.rxjava2)
     implementation(libs.epoxy)
+    implementation(libs.epoxy.paging3)
     implementation(libs.lottie)
     implementation(libs.shimmer)
     implementation(libs.glide)
@@ -83,11 +89,11 @@ dependencies {
     implementation(libs.zoomage)
     implementation(libs.okhttp3)
     implementation(libs.logging.interceptor)
+    implementation(libs.paging.rxjava2)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.converter.scalars)
     implementation(libs.adapter.rxjava2)
-    implementation(libs.mobileads)
     implementation(libs.circleimageview)
     implementation(libs.joda.convert)
     implementation(libs.joda.time)
@@ -97,9 +103,9 @@ dependencies {
     implementation(libs.rxjava)
     implementation(libs.rxkotlin)
     implementation(libs.androidx.work.runtime.ktx)
-    ksp(libs.ksp.hilt)
-    ksp(libs.ksp.epoxy)
-    ksp(libs.ksp.glide)
+    kapt(libs.ksp.hilt)
+    kapt(libs.ksp.epoxy)
+    kapt(libs.ksp.glide)
     ksp(libs.ksp.room)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

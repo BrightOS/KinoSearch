@@ -1,9 +1,6 @@
 package ru.bashcony.kinosearch.data.movie.repository
 
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
 import retrofit2.Response
 import ru.bashcony.kinosearch.data.movie.remote.api.MovieApi
 import ru.bashcony.kinosearch.data.movie.remote.dto.MovieResponse

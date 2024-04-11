@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -31,7 +32,7 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/front_cover"
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
+                android:layout_height="322dp"
                 android:adjustViewBounds="true"
                 android:paddingVertical="20dp"
                 android:scaleType="centerCrop"
@@ -98,8 +99,8 @@
                 app:layout_constraintTop_toBottomOf="@id/title_original" />
 
             <TextView
-                android:id="@+id/country_and_time"
-                android:layout_width="wrap_content"
+                android:id="@+id/country_and_date"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter_regular"
                 android:gravity="center"
@@ -115,8 +116,9 @@
                 android:id="@+id/age_restriction"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginHorizontal="5dp"
                 android:layout_marginTop="10dp"
+                android:visibility="gone"
                 android:background="@drawable/background_age"
                 android:backgroundTint="?colorOnPrimaryContainer"
                 android:fontFamily="@font/inter_semibold"
@@ -128,18 +130,19 @@
                 app:layout_constraintEnd_toStartOf="@id/tmdb"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/country_and_time" />
+                app:layout_constraintTop_toBottomOf="@id/country_and_date" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/tmdb"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginStart="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
                 app:cardCornerRadius="5dp"
-                app:layout_constraintBottom_toBottomOf="@id/age_restriction"
                 app:layout_constraintEnd_toStartOf="@id/imdb"
                 app:layout_constraintStart_toEndOf="@id/age_restriction"
-                app:layout_constraintTop_toTopOf="@id/age_restriction"
+                app:layout_constraintTop_toBottomOf="@id/country_and_date"
                 app:strokeColor="?colorOnPrimaryContainer">
 
                 <LinearLayout
@@ -162,7 +165,7 @@
                         android:textColor="?colorOnPrimary"
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/country_and_time" />
+                        app:layout_constraintTop_toBottomOf="@id/country_and_date" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -182,13 +185,14 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/imdb"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginStart="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
                 app:cardCornerRadius="5dp"
-                app:layout_constraintBottom_toBottomOf="@id/age_restriction"
                 app:layout_constraintEnd_toStartOf="@id/kp"
                 app:layout_constraintStart_toEndOf="@id/tmdb"
-                app:layout_constraintTop_toTopOf="@id/age_restriction"
+                app:layout_constraintTop_toBottomOf="@id/country_and_date"
                 app:strokeColor="?colorOnPrimaryContainer">
 
                 <LinearLayout
@@ -211,7 +215,7 @@
                         android:textColor="?colorOnPrimary"
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/country_and_time" />
+                        app:layout_constraintTop_toBottomOf="@id/country_and_date" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -231,14 +235,14 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/kp"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="20dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
                 app:cardCornerRadius="5dp"
-                app:layout_constraintBottom_toBottomOf="@id/age_restriction"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/imdb"
-                app:layout_constraintTop_toTopOf="@id/age_restriction"
+                app:layout_constraintTop_toBottomOf="@id/country_and_date"
                 app:strokeColor="?colorOnPrimaryContainer">
 
                 <LinearLayout
@@ -261,7 +265,7 @@
                         android:textColor="?colorOnPrimary"
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/country_and_time" />
+                        app:layout_constraintTop_toBottomOf="@id/country_and_date" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -280,6 +284,13 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/rating_barrier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="age_restriction, imdb, tmdb, kp" />
+
             <TextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
@@ -291,7 +302,7 @@
                 android:maxLines="5"
                 android:text="34-летний безработный спасает группу подростков от смерти под колёсами грузовика, однако погибает сам. Он перерождается в волшебном мире под именем Рудеус Грейрат. Сохранив знания и опыт, он клянется вести полноценную жизнь и не повторять свои прошлые ошибки. Новые родители считают его, одаренного магической силой и разумом взрослого человека, гением, и вскоре Рудеус начинает учиться у могущественных воинов. Но, несмотря на его невинную внешность, парень по-прежнему извращенный отаку, который мечтает наконец начать встречаться с девушкой."
                 android:textColor="?colorOnBackground"
-                app:layout_constraintTop_toBottomOf="@id/age_restriction" />
+                app:layout_constraintTop_toBottomOf="@id/rating_barrier" />
 
             <TextView
                 android:id="@+id/description_expand"
@@ -315,10 +326,11 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/description_expand" />
 
-            <com.airbnb.epoxy.EpoxyRecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/genre_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clipToPadding="false"
                 android:orientation="horizontal"
                 android:paddingHorizontal="17.5dp"
                 android:paddingVertical="5dp"
@@ -338,16 +350,18 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/genre_recycler" />
 
-            <com.airbnb.epoxy.Carousel
-                android:id="@+id/seasons_carousel"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/seasons_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clipToPadding="false"
                 android:orientation="horizontal"
-                android:paddingHorizontal="17.5dp"
                 android:paddingVertical="5dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
                 app:layout_constraintTop_toBottomOf="@id/seasons_title"
                 tools:itemCount="1"
-                tools:listitem="@layout/item_season"/>
+                tools:listitem="@layout/item_season" />
 
             <TextView
                 android:id="@+id/video_title"
@@ -359,18 +373,19 @@
                 android:text="Видео"
                 android:textColor="?colorOnBackground"
                 android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@id/seasons_carousel" />
+                app:layout_constraintTop_toBottomOf="@id/seasons_recycler" />
 
-            <com.airbnb.epoxy.EpoxyRecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/video_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clipToPadding="false"
                 android:orientation="horizontal"
-                android:paddingHorizontal="17.5dp"
+                android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
                 app:layout_constraintTop_toBottomOf="@id/video_title"
                 tools:itemCount="1"
-                tools:listitem="@layout/item_video"/>
+                tools:listitem="@layout/item_video" />
 
             <TextView
                 android:id="@+id/person_title"
@@ -384,13 +399,14 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/video_recycler" />
 
-            <com.airbnb.epoxy.EpoxyRecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/person_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clipToPadding="false"
                 android:orientation="horizontal"
-                android:paddingHorizontal="17.5dp"
-                android:paddingVertical="2.5dp"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
                 app:layout_constraintTop_toBottomOf="@id/person_title"
                 tools:itemCount="3"
                 tools:listitem="@layout/item_person" />
@@ -407,13 +423,14 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/person_recycler" />
 
-            <com.airbnb.epoxy.EpoxyRecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/review_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clipToPadding="false"
                 android:orientation="horizontal"
-                android:paddingHorizontal="17.5dp"
-                android:paddingVertical="2.5dp"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
                 app:layout_constraintTop_toBottomOf="@id/review_title"
                 tools:itemCount="1"
                 tools:listitem="@layout/item_review" />
@@ -430,16 +447,42 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/review_recycler" />
 
-            <com.airbnb.epoxy.EpoxyRecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/premiere_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clipToPadding="false"
                 android:orientation="horizontal"
-                android:paddingHorizontal="17.5dp"
-                android:paddingVertical="2.5dp"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
                 app:layout_constraintTop_toBottomOf="@id/premiere_title"
                 tools:itemCount="1"
                 tools:listitem="@layout/item_premiere" />
+
+            <TextView
+                android:id="@+id/sequels_and_prequels_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="Сиквелы и приквелы"
+                android:textColor="?colorOnBackground"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/premiere_recycler" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/sequels_and_prequels_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingVertical="5dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                app:layout_constraintTop_toBottomOf="@id/sequels_and_prequels_title"
+                tools:itemCount="1"
+                tools:listitem="@layout/item_similar_movie" />
 
             <TextView
                 android:id="@+id/similar_movies_title"
@@ -451,21 +494,32 @@
                 android:text="Похожие фильмы"
                 android:textColor="?colorOnBackground"
                 android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@id/premiere_recycler" />
+                app:layout_constraintTop_toBottomOf="@id/sequels_and_prequels_recycler" />
 
-            <com.airbnb.epoxy.EpoxyRecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/similar_movies_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clipToPadding="false"
                 android:orientation="horizontal"
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="5dp"
                 app:layout_constraintTop_toBottomOf="@id/similar_movies_title"
                 tools:itemCount="1"
-                tools:listitem="@layout/item_movie" />
+                tools:listitem="@layout/item_similar_movie" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/loading_layout"
+        layout="@layout/layout_loading"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/internet_error_layout"
+        layout="@layout/layout_internet_error"
+        android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         style="@style/Widget.Material3.FloatingActionButton.Primary"

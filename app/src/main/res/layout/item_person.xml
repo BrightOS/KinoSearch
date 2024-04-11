@@ -6,7 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:cardCornerRadius="10dp"
-    android:layout_margin="2.5dp">
+    android:layout_margin="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="250dp"
@@ -15,10 +15,12 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/person_photo"
-            android:layout_width="wrap_content"
+            android:layout_width="45dp"
+            android:src="@drawable/ic_person"
             android:layout_height="match_parent"
+            android:backgroundTint="?colorSurfaceContainerLow"
             android:adjustViewBounds="true"
-            android:src="@drawable/actor"
+            android:background="@drawable/background_age"
             app:layout_constraintStart_toStartOf="parent"
             app:shapeAppearanceOverlay="@style/RoundedImageView.5dp" />
 

@@ -1,6 +1,5 @@
 package ru.bashcony.kinosearch.data.movie.remote.dto
 
-import android.media.Image
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
@@ -18,16 +17,18 @@ data class MovieResponse(
     @SerializedName("premiere") val premiere: PremiereResponse? = null,
     @SerializedName("slogan") val slogan: String? = null,
     @SerializedName("year") val year: Int? = null,
-    @SerializedName("facts") val facts: List<FactResponse>? = null,
-    @SerializedName("genres") val genres: List<NameResponse>? = null,
-    @SerializedName("countries") val countries: List<NameResponse>? = null,
+    @SerializedName("facts") val facts: List<FactResponse>? = listOf(),
+    @SerializedName("genres") val genres: List<NameResponse>? = listOf(),
+    @SerializedName("countries") val countries: List<NameResponse>? = listOf(),
+    @SerializedName("seasonsInfo") val seasonsInfo: List<SeasonInfoResponse>? = listOf(),
     @SerializedName("poster") val poster: ImageResponse? = null,
     @SerializedName("backdrop") val backdrop: ImageResponse? = null,
     @SerializedName("logo") val logo: ImageResponse? = null,
     @SerializedName("videos") val trailersResponse: TrailersResponse? = null,
-    @SerializedName("names") val names: List<NameResponse>? = null,
-    @SerializedName("similarMovies") val similarMovies: List<MovieResponse>? = null,
-    @SerializedName("releaseYears") val releaseYears: YearsResponse? = null,
+    @SerializedName("names") val names: List<NameResponse>? = listOf(),
+    @SerializedName("similarMovies") val similarMovies: List<LinkedMovieResponse>? = listOf(),
+    @SerializedName("sequelsAndPrequels") val sequelsAndPrequels: List<LinkedMovieResponse>? = listOf(),
+    @SerializedName("releaseYears") val releaseYears: List<YearsResponse>? = listOf(),
     @SerializedName("isSeries") val isSeries: Boolean? = null,
     @SerializedName("seriesLength") val seriesLength: Int? = null,
     @SerializedName("totalSeriesLength") val totalSeriesLength: Int? = null,
@@ -35,7 +36,7 @@ data class MovieResponse(
     @SerializedName("status") val status: String? = null,
     @SerializedName("top10") val top10: Int? = null,
     @SerializedName("top250") val top250: Int? = null,
-    @SerializedName("ticketsOnSale") val ticketsOnSale: Int? = null,
+    @SerializedName("ticketsOnSale") val ticketsOnSale: Boolean? = null,
     @SerializedName("updatedAt") val updatedAt: String? = null,
     @SerializedName("createdAt") val createdAt: String? = null
 )

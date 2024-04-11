@@ -18,12 +18,12 @@ class MovieModule {
 
     @Singleton
     @Provides
-    fun provideLoginApi(retrofit: Retrofit) =
+    fun provideMovieApi(retrofit: Retrofit): MovieApi =
         retrofit.create(MovieApi::class.java)
 
     @Singleton
     @Provides
-    fun provideMovieRepository(movieApi: MovieApi) =
+    fun provideMovieRepository(movieApi: MovieApi): MovieRepository =
         MovieRepositoryImpl(movieApi)
 
 }

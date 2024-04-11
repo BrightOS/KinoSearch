@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/loading_root"
+    android:background="?android:colorBackground"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loading_progress"
+        style="@style/Widget.Material3.CircularProgressIndicator.Small"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_width="wrap_content"
+        app:trackThickness="5dp"
+        android:indeterminate="true"
+        app:layout_constraintBottom_toTopOf="@id/loading_title"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/loading_title"
+        android:layout_width="match_parent"
+        android:fontFamily="@font/inter_bold"
+        android:layout_marginVertical="5dp"
+        android:text="Идёт загрузка..."
+        android:gravity="center"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/loading_progress"
+        app:layout_constraintBottom_toTopOf="@id/loading_description"
+        android:layout_marginHorizontal="15dp"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/loading_description"
+        android:layout_width="match_parent"
+        android:fontFamily="@font/inter_medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="Пожалуйста, подождите."
+        android:gravity="center"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/loading_title"
+        android:layout_marginHorizontal="15dp"
+        android:layout_height="wrap_content"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

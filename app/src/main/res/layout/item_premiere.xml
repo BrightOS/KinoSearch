@@ -5,7 +5,7 @@
     style="@style/Widget.Material3.CardView.Filled"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="2.5dp"
+    android:layout_margin="5dp"
     app:cardCornerRadius="10dp">
 
     <LinearLayout
