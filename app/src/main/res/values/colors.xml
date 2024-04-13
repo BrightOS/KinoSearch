@@ -4,6 +4,12 @@
     <color name="color_medium">@color/grey_700</color>
     <color name="color_bad">@color/red_600</color>
 
+    <color name="background_search_text_color_alpha">#88F0DFD7</color>
+    <color name="background_search_text_color">#F0DFD7</color>
+
+    <color name="background_search_color_alpha">#EEFFF8F5</color>
+    <color name="background_search_color">#FFF8F5</color>
+
     <color name="md_theme_primary">#8C4F27</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>
     <color name="md_theme_primaryContainer">#FFDBC8</color>

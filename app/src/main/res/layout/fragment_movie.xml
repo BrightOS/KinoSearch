@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?android:colorBackground"
     android:fitsSystemWindows="true">
 
     <androidx.core.widget.NestedScrollView
@@ -12,8 +13,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true">
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/back_cover"
@@ -34,6 +34,7 @@
                 android:layout_width="200dp"
                 android:layout_height="322dp"
                 android:adjustViewBounds="true"
+                android:background="?colorSurfaceContainerHighest"
                 android:paddingVertical="20dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/cover"
@@ -77,7 +78,6 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/inter_regular"
                 android:gravity="center"
-                android:maxLines="1"
                 android:text="Mushoku Tensei: Isekai Ittara Honki Dasu"
                 android:textColor="?colorOnBackground"
                 android:textSize="14sp"
@@ -118,7 +118,6 @@
                 android:layout_height="0dp"
                 android:layout_marginHorizontal="5dp"
                 android:layout_marginTop="10dp"
-                android:visibility="gone"
                 android:background="@drawable/background_age"
                 android:backgroundTint="?colorOnPrimaryContainer"
                 android:fontFamily="@font/inter_semibold"
@@ -127,9 +126,31 @@
                 android:text="18+"
                 android:textColor="?colorOnPrimary"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toStartOf="@id/tmdb"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/mpaa"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/country_and_date" />
+
+            <TextView
+                android:id="@+id/mpaa"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/background_age"
+                android:backgroundTint="?colorOnPrimaryContainer"
+                android:fontFamily="@font/inter_semibold"
+                android:gravity="center"
+                android:paddingHorizontal="5dp"
+                android:text="PG13"
+                android:textAllCaps="true"
+                android:textColor="?colorOnPrimary"
+                android:textSize="14sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/tmdb"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@id/age_restriction"
                 app:layout_constraintTop_toBottomOf="@id/country_and_date" />
 
             <com.google.android.material.card.MaterialCardView
@@ -141,7 +162,7 @@
                 android:visibility="gone"
                 app:cardCornerRadius="5dp"
                 app:layout_constraintEnd_toStartOf="@id/imdb"
-                app:layout_constraintStart_toEndOf="@id/age_restriction"
+                app:layout_constraintStart_toEndOf="@id/mpaa"
                 app:layout_constraintTop_toBottomOf="@id/country_and_date"
                 app:strokeColor="?colorOnPrimaryContainer">
 
@@ -289,7 +310,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="age_restriction, imdb, tmdb, kp" />
+                app:constraint_referenced_ids="age_restriction, imdb, tmdb, kp, mpaa" />
 
             <TextView
                 android:id="@+id/description"
@@ -326,7 +347,7 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/description_expand" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <ru.bashcony.kinosearch.widget.EmptySupportRecyclerView
                 android:id="@+id/genre_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -350,7 +371,7 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/genre_recycler" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <ru.bashcony.kinosearch.widget.EmptySupportRecyclerView
                 android:id="@+id/seasons_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -364,6 +385,30 @@
                 tools:listitem="@layout/item_season" />
 
             <TextView
+                android:id="@+id/image_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="15dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="Изображения"
+                android:textColor="?colorOnBackground"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/seasons_recycler" />
+
+            <ru.bashcony.kinosearch.widget.EmptySupportRecyclerView
+                android:id="@+id/image_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="5dp"
+                app:layout_constraintTop_toBottomOf="@id/image_title"
+                tools:itemCount="1"
+                tools:listitem="@layout/item_image" />
+
+            <TextView
                 android:id="@+id/video_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -373,9 +418,9 @@
                 android:text="Видео"
                 android:textColor="?colorOnBackground"
                 android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@id/seasons_recycler" />
+                app:layout_constraintTop_toBottomOf="@id/image_recycler" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <ru.bashcony.kinosearch.widget.EmptySupportRecyclerView
                 android:id="@+id/video_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -399,7 +444,7 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/video_recycler" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <ru.bashcony.kinosearch.widget.EmptySupportRecyclerView
                 android:id="@+id/person_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -423,7 +468,7 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/person_recycler" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <ru.bashcony.kinosearch.widget.EmptySupportRecyclerView
                 android:id="@+id/review_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -447,7 +492,7 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/review_recycler" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <ru.bashcony.kinosearch.widget.EmptySupportRecyclerView
                 android:id="@+id/premiere_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -471,7 +516,7 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/premiere_recycler" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <ru.bashcony.kinosearch.widget.EmptySupportRecyclerView
                 android:id="@+id/sequels_and_prequels_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -496,7 +541,7 @@
                 android:textSize="16sp"
                 app:layout_constraintTop_toBottomOf="@id/sequels_and_prequels_recycler" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <ru.bashcony.kinosearch.widget.EmptySupportRecyclerView
                 android:id="@+id/similar_movies_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -522,6 +567,7 @@
         android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/back_button"
         style="@style/Widget.Material3.FloatingActionButton.Primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

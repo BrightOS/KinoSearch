@@ -1,4 +1,11 @@
 <resources>
+
+    <color name="background_search_text_color_alpha">#883D332D</color>
+    <color name="background_search_text_color">#3D332D</color>
+
+    <color name="background_search_color_alpha">#EE1A120D</color>
+    <color name="background_search_color">#1A120D</color>
+
     <color name="md_theme_primary">#FFB68B</color>
     <color name="md_theme_onPrimary">#522300</color>
     <color name="md_theme_primaryContainer">#6F3811</color>

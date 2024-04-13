@@ -10,34 +10,45 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import ru.bashcony.kinosearch.R
-import ru.bashcony.kinosearch.data.movie.remote.dto.LinkedMovieResponse
-import ru.bashcony.kinosearch.data.movie.remote.dto.MovieResponse
+import ru.bashcony.kinosearch.domain.movie.entity.LinkedMovieEntity
 import ru.bashcony.kinosearch.databinding.ItemSimilarMovieBinding
 import ru.bashcony.kinosearch.infra.utils.DrawableAlwaysCrossFadeFactory
 import ru.bashcony.kinosearch.infra.utils.typeToRussian
 
 class SimilarMoviesAdapter(
     private val onMovieClick: (movieId: Int) -> Unit
-) : ListAdapter<LinkedMovieResponse, SimilarMoviesAdapter.ViewHolder>(MovieDiffUtil) {
+) : ListAdapter<LinkedMovieEntity, SimilarMoviesAdapter.ViewHolder>(MovieDiffUtil) {
 
-    inner class ViewHolder(val binding: ItemSimilarMovieBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: ItemSimilarMovieBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        (getItem(position) ?: LinkedMovieResponse()).let {
-            Glide.with(holder.binding.movieCover)
-                .load(it.poster?.previewUrl)
-                .thumbnail(Glide.with(holder.binding.root.context)
-                    .load(R.drawable.ic_wallpaper)
-                    .dontTransform())
-                .sizeMultiplier(0.75f)
-                .transition(DrawableTransitionOptions.with(DrawableAlwaysCrossFadeFactory()))
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.DATA)
-                .into(holder.binding.movieCover)
+        getItem(position)?.let {
+            if (it.poster?.previewUrl != null)
+                Glide.with(holder.binding.movieCover)
+                    .load(it.poster?.previewUrl)
+                    .thumbnail(
+                        Glide.with(holder.binding.root.context)
+                            .load(R.drawable.ic_wallpaper)
+                            .dontTransform()
+                    )
+                    .override(
+                        holder.binding.movieCover.measuredWidth,
+                        holder.binding.movieCover.measuredHeight
+                    )
+                    .transition(DrawableTransitionOptions.with(DrawableAlwaysCrossFadeFactory()))
+                    .centerCrop()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(holder.binding.movieCover)
 
             holder.binding.movieType.text = typeToRussian[it.type] ?: "другое"
-            holder.binding.movieTitle.text = it.name
+            holder.binding.movieTitle.text = if (it.name.isNullOrBlank().not())
+                it.name
+            else if (it.alternativeName.isNullOrBlank().not())
+                it.alternativeName
+            else
+                it.enName
 
             holder.binding.movieRoot.setOnClickListener { _ ->
                 onMovieClick(it.id ?: -1)
@@ -46,13 +57,22 @@ class SimilarMoviesAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(ItemSimilarMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        ViewHolder(
+            ItemSimilarMovieBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
 
-    object MovieDiffUtil : DiffUtil.ItemCallback<LinkedMovieResponse>() {
-        override fun areItemsTheSame(oldItem: LinkedMovieResponse, newItem: LinkedMovieResponse) =
+    object MovieDiffUtil : DiffUtil.ItemCallback<LinkedMovieEntity>() {
+        override fun areItemsTheSame(oldItem: LinkedMovieEntity, newItem: LinkedMovieEntity) =
             oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: LinkedMovieResponse, newItem: LinkedMovieResponse) =
+        override fun areContentsTheSame(
+            oldItem: LinkedMovieEntity,
+            newItem: LinkedMovieEntity
+        ) =
             oldItem.equals(newItem)
 
     }

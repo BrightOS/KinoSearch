@@ -8,26 +8,21 @@ import androidx.core.content.ContextCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import ru.bashcony.kinosearch.R
-import ru.bashcony.kinosearch.data.review.remote.dto.ReviewResponse
+import ru.bashcony.kinosearch.domain.review.entity.ReviewEntity
 import ru.bashcony.kinosearch.databinding.ItemReviewBinding
 import ru.bashcony.kinosearch.infra.utils.date
 import ru.bashcony.kinosearch.infra.utils.russianStringWithHour
 
 class ReviewsAdapter(
-    private val onReviewClick: (reviewResponse: ReviewResponse) -> Unit
-) : PagingDataAdapter<ReviewResponse, ReviewsAdapter.ViewHolder>(ReviewDiffUtil) {
+    private val onReviewClick: (reviewEntity: ReviewEntity) -> Unit
+) : PagingDataAdapter<ReviewEntity, ReviewsAdapter.ViewHolder>(ReviewDiffUtil) {
 
     inner class ViewHolder(val binding: ItemReviewBinding) : RecyclerView.ViewHolder(binding.root)
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        (getItem(position) ?: ReviewResponse()).let {
-            Glide.with(holder.binding.root.context)
-                .load(R.drawable.ic_person)
-                .into(holder.binding.reviewPhoto)
-
+        getItem(position)?.let {
             holder.binding.reviewName.text = it.author
             holder.binding.reviewTitle.text = it.title
             holder.binding.reviewDescription.text = it.review
@@ -53,13 +48,13 @@ class ReviewsAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ViewHolder(ItemReviewBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
-    object ReviewDiffUtil : DiffUtil.ItemCallback<ReviewResponse>() {
+    object ReviewDiffUtil : DiffUtil.ItemCallback<ReviewEntity>() {
 
-        override fun areItemsTheSame(oldItem: ReviewResponse, newItem: ReviewResponse): Boolean {
+        override fun areItemsTheSame(oldItem: ReviewEntity, newItem: ReviewEntity): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: ReviewResponse, newItem: ReviewResponse): Boolean {
+        override fun areContentsTheSame(oldItem: ReviewEntity, newItem: ReviewEntity): Boolean {
             return oldItem == newItem
         }
     }

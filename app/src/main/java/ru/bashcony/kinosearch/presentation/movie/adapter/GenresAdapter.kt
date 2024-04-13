@@ -3,14 +3,10 @@ package ru.bashcony.kinosearch.presentation.movie.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import ru.bashcony.kinosearch.data.season.remote.dto.SeasonResponse
 import ru.bashcony.kinosearch.databinding.ItemGenreBinding
-import ru.bashcony.kinosearch.databinding.ItemSeasonBinding
 
 class GenresAdapter(
     private val onGenreClick: (genreName: String) -> Unit
@@ -20,7 +16,7 @@ class GenresAdapter(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        (getItem(position) ?: "").let {
+        (getItem(position).orEmpty()).let {
             holder.binding.genreRoot.text = it
             holder.binding.genreRoot.setOnClickListener { _ ->
                 onGenreClick(it)

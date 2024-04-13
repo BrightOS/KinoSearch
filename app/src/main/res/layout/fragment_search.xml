@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <ru.bashcony.kinosearch.widget.EmptySupportRecyclerView
+        android:id="@+id/movie_search_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingHorizontal="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="64dp" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/search_indicator"
+        style="@style/Widget.Material3.CircularProgressIndicator.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/background_progress"
+        android:backgroundTint="@color/background_search_text_color"
+        android:indeterminate="true"
+        android:padding="5dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/search_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:trackThickness="5dp" />
+
+    <View
+        android:id="@+id/search_background"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="-10dp"
+        android:background="@drawable/background_search"
+        android:backgroundTint="@color/background_search_color_alpha"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@id/search_text" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/search_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="@drawable/background_search_text"
+        android:backgroundTint="@color/background_search_text_color_alpha"
+        android:drawableStart="@drawable/ic_filter"
+        android:drawableEnd="@drawable/ic_search"
+        android:drawablePadding="5dp"
+        android:fontFamily="@font/inter_regular"
+        android:gravity="center"
+        android:hint="Искать среди фильмов и сериалов"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textColor="?colorOnSurface"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintDimensionRatio="1:1"
+        android:maxLength="1"
+        android:gravity="center"
+        android:textSize="10sp"
+        android:textColor="?colorOnPrimaryContainer"
+        android:layout_marginStart="24sp"
+        android:layout_marginTop="5dp"
+        android:text="1"
+        android:fontFamily="@font/inter_black"
+        android:background="@drawable/background_badge"
+        app:layout_constraintTop_toTopOf="@id/search_text"
+        app:layout_constraintStart_toStartOf="@id/search_text"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

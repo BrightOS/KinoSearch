@@ -16,10 +16,16 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import ru.bashcony.kinosearch.databinding.FragmentMovieBinding
+import ru.bashcony.kinosearch.infra.utils.DrawableAlwaysCrossFadeFactory
+import ru.bashcony.kinosearch.infra.utils.registerDataObserver
 import ru.bashcony.kinosearch.presentation.movie.adapter.GenresAdapter
+import ru.bashcony.kinosearch.presentation.movie.adapter.ImagesAdapter
 import ru.bashcony.kinosearch.presentation.movie.adapter.PersonsAdapter
 import ru.bashcony.kinosearch.presentation.movie.adapter.PremieresAdapter
 import ru.bashcony.kinosearch.presentation.movie.adapter.ReviewsAdapter
@@ -56,6 +62,15 @@ class MovieFragment : Fragment() {
                     View.GONE
         }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -68,81 +83,6 @@ class MovieFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        binding.seasonsRecycler.apply {
-            layoutManager = LinearLayoutManager(
-                context,
-                LinearLayoutManager.HORIZONTAL,
-                true
-            ).apply {
-                stackFromEnd = true
-            }
-            adapter = getSeasonsAdapter()
-        }
-
-        binding.genreRecycler.apply {
-            layoutManager = LinearLayoutManager(
-                context,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
-            adapter = getGenresAdapter()
-        }
-
-        binding.premiereRecycler.apply {
-            layoutManager = LinearLayoutManager(
-                context,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
-            adapter = getPremieresAdapter()
-        }
-
-        binding.similarMoviesRecycler.apply {
-            layoutManager = LinearLayoutManager(
-                context,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
-            adapter = getMoviesListAdapter()
-        }
-
-        binding.sequelsAndPrequelsRecycler.apply {
-            layoutManager = LinearLayoutManager(
-                context,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
-            adapter = getMoviesListAdapter()
-        }
-
-        binding.videoRecycler.apply {
-            layoutManager = LinearLayoutManager(
-                context,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
-            adapter = getVideosAdapter()
-        }
-
-        binding.personRecycler.apply {
-            layoutManager = GridLayoutManager(
-                context,
-                3,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
-            adapter = getPersonsAdapter()
-        }
-
-        binding.reviewRecycler.apply {
-            layoutManager = LinearLayoutManager(
-                context,
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
-            adapter = getReviewsAdapter()
-        }
-
         binding.descriptionExpand.setOnClickListener {
             binding.description.maxLines.let {
                 binding.description.maxLines = if (it == 5) 100 else 5
@@ -152,6 +92,12 @@ class MovieFragment : Fragment() {
         }
 
         movieViewModel.state.observe(viewLifecycleOwner) {
+
+            setupRecyclers()
+
+            binding.backButton.setOnClickListener {
+                findNavController().popBackStack()
+            }
 
             Log.d("state", it::class.qualifiedName.toString())
 
@@ -199,31 +145,57 @@ class MovieFragment : Fragment() {
                     ).show()
                 }
 
-                is MovieFragmentState.SeasonsLoaded -> {
-
-                }
-
                 is MovieFragmentState.MovieLoaded -> {
                     internetErrorVisibility = false
                     loadingVisibility = false
 
-                    with(it.movieResponse) {
-                        binding.titleRussian.text = name
-                        binding.titleOriginal.text = alternativeName
+                    with(it.movieEntity) {
+                        if (name != null) {
+                            binding.titleRussian.apply {
+                                text = name
+                                visibility = View.VISIBLE
+                            }
+                        } else
+                            binding.titleRussian.visibility = View.GONE
+
+                        if (alternativeName != null) {
+                            binding.titleOriginal.apply {
+                                text = alternativeName
+                                visibility = View.VISIBLE
+                            }
+                        } else
+                            binding.titleOriginal.visibility = View.GONE
 
                         binding.mainInformation.text =
-                            "${seasonsInfo?.count()} сезона, ${seasonsInfo?.sumOf { it.episodesCount }} серии по ~$seriesLength мин."
+                            if (isSeries == true)
+                                "${seasonsInfo?.count()} сезона, ${seasonsInfo.orEmpty().sumOf { it.episodesCount ?: 0 }} серии по ~$seriesLength мин."
+                            else
+                                "Фильм, ~$movieLength мин."
 
                         binding.countryAndDate.text =
                             "${countries?.map { it.name }?.joinToString(", ")}, ${
-                                releaseYears?.get(0)?.start.let {
-                                    if (it != null) "с $it " else ""
+                                releaseYears?.getOrNull(0)?.start.let {
+                                    if (it != null) "с $it " else if (isSeries != true) "$year " else ""
                                 }
                             }${
-                                releaseYears?.get(0)?.end.let {
+                                releaseYears?.getOrNull(0)?.end.let {
                                     if (it != null) "по $it " else ""
                                 }
-                            }г."
+                            }${
+                                if (releaseYears != null)
+                                    "г."
+                                else
+                                    ""
+                            }"
+
+
+                        if (ratingMpaa != null) {
+                            binding.mpaa.apply {
+                                visibility = View.VISIBLE
+                                text = "$ratingMpaa"
+                            }
+                        } else
+                            binding.mpaa.visibility = View.GONE
 
                         if (ageRating != null) {
                             binding.ageRestriction.apply {
@@ -257,6 +229,11 @@ class MovieFragment : Fragment() {
 
                         binding.description.text = description
 
+                        binding.descriptionExpand.visibility = if (binding.description.lineCount >= 5)
+                            View.VISIBLE
+                        else
+                            View.GONE
+
                         binding.genreRecycler.adapter?.let {
                             if (it is GenresAdapter)
                                 it.submitList(genres?.map { it.name })
@@ -286,27 +263,38 @@ class MovieFragment : Fragment() {
 
                         binding.videoRecycler.adapter?.let {
                             if (it is VideosAdapter)
-                                it.submitList(trailersResponse?.trailers.orEmpty())
+                                it.submitList(trailersEntity?.trailers.orEmpty())
                         }
 
                         Glide.with(binding.root.context)
-                            .load(it.movieResponse.poster?.url)
-                            .apply(RequestOptions().centerCrop())
+                            .load(it.movieEntity.poster?.url)
+                            .apply(RequestOptions().centerCrop()
+                                .override(
+                                    binding.frontCover.measuredWidth,
+                                    binding.frontCover.measuredHeight
+                                ))
                             .thumbnail(
                                 Glide.with(binding.root.context)
-                                    .load(it.movieResponse.poster?.previewUrl)
+                                    .load(it.movieEntity.poster?.previewUrl)
                                     .apply(RequestOptions().centerCrop())
                             )
+                            .transition(DrawableTransitionOptions.with(DrawableAlwaysCrossFadeFactory()))
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(binding.frontCover)
 
                         Glide.with(binding.root.context)
-                            .load(it.movieResponse.backdrop?.url ?: it.movieResponse.poster?.url)
-                            .apply(RequestOptions().centerCrop())
+                            .load(it.movieEntity.backdrop?.url ?: it.movieEntity.poster?.url)
                             .thumbnail(
                                 Glide.with(binding.root.context)
-                                    .load(it.movieResponse.backdrop?.previewUrl)
+                                    .load(it.movieEntity.backdrop?.previewUrl)
                                     .apply(RequestOptions().centerCrop())
                             )
+                            .transition(
+                                DrawableTransitionOptions.with(
+                                    DrawableAlwaysCrossFadeFactory()
+                                ))
+                            .centerCrop()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(binding.backCover)
                     }
                 }
@@ -314,36 +302,134 @@ class MovieFragment : Fragment() {
         }
     }
 
-    fun getSeasonsAdapter() =
+    private fun setupRecyclers() {
+        binding.seasonsRecycler.apply {
+            layoutManager = LinearLayoutManager(
+                context,
+                LinearLayoutManager.HORIZONTAL,
+                true
+            ).apply {
+                stackFromEnd = true
+            }
+            emptyText = "сезонах и сериях"
+            adapter = getSeasonsAdapter()
+        }
+
+        binding.genreRecycler.apply {
+            layoutManager = LinearLayoutManager(
+                context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            emptyText = "жанрах"
+            adapter = getGenresAdapter()
+        }
+
+        binding.premiereRecycler.apply {
+            layoutManager = LinearLayoutManager(
+                context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            emptyText = "датах проката"
+            adapter = getPremieresAdapter()
+        }
+
+        binding.similarMoviesRecycler.apply {
+            layoutManager = LinearLayoutManager(
+                context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            emptyText = "похожих фильмах"
+            adapter = getMoviesListAdapter()
+        }
+
+        binding.sequelsAndPrequelsRecycler.apply {
+            layoutManager = LinearLayoutManager(
+                context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            emptyText = "сиквелах и приквелах"
+            adapter = getMoviesListAdapter()
+        }
+
+        binding.videoRecycler.apply {
+            layoutManager = LinearLayoutManager(
+                context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            emptyText = "видео"
+            adapter = getVideosAdapter()
+        }
+
+        binding.personRecycler.apply {
+            layoutManager = GridLayoutManager(
+                context,
+                3,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            emptyText = "актёрах и съёмочной группе"
+            adapter = getPersonsAdapter()
+        }
+
+        binding.reviewRecycler.apply {
+            layoutManager = LinearLayoutManager(
+                context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            emptyText = "рецензиях"
+            adapter = getReviewsAdapter()
+        }
+
+        binding.imageRecycler.apply {
+            layoutManager = LinearLayoutManager(
+                context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            emptyText = "изображениях"
+            adapter = getImagesAdapter()
+        }
+    }
+
+    private fun getSeasonsAdapter() =
         SeasonsAdapter(onSeasonClick = {
             findNavController()
         }).apply {
             movieViewModel.doOnSeasonsLoaded {
                 submitData(lifecycle, it)
             }
+            registerDataObserver {
+
+            }
         }
 
-    fun getGenresAdapter() =
+    private fun getGenresAdapter() =
         GenresAdapter(onGenreClick = {
             findNavController()
         })
 
-    fun getPremieresAdapter() =
+    private fun getPremieresAdapter() =
         PremieresAdapter()
 
-    fun getMoviesListAdapter() =
+    private fun getMoviesListAdapter() =
         SimilarMoviesAdapter(onMovieClick = {
             findNavController().navigate(MovieFragmentDirections.actionMovieFragmentSelf(it))
         })
 
-    fun getVideosAdapter() =
+    private fun getVideosAdapter() =
         VideosAdapter(onVideoClick = {
             val i = Intent(Intent.ACTION_VIEW)
             i.setData(Uri.parse(it))
             startActivity(i)
         })
 
-    fun getPersonsAdapter() =
+    private fun getPersonsAdapter() =
         PersonsAdapter(onPersonClick = {
             findNavController()
         }).apply {
@@ -352,11 +438,20 @@ class MovieFragment : Fragment() {
             }
         }
 
-    fun getReviewsAdapter() =
+    private fun getReviewsAdapter() =
         ReviewsAdapter(onReviewClick = {
             findNavController()
         }).apply {
             movieViewModel.doOnReviewsLoaded {
+                submitData(lifecycle, it)
+            }
+        }
+
+    private fun getImagesAdapter() =
+        ImagesAdapter(onImageClick = {
+            findNavController()
+        }).apply {
+            movieViewModel.doOnImagesLoaded {
                 submitData(lifecycle, it)
             }
         }

@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.google.dagger.hilt)
     alias(libs.plugins.navigation.safe.args)
     alias(libs.plugins.google.devtools.ksp)
-    id("kotlin-kapt")
+    kotlin("kapt")
 }
 
 android {
@@ -21,23 +21,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        // Токен для API надо будет разместить в local.properties под названием "key"
-        buildConfigField(
-            type = "String",
-            name = "API_KEY",
-            value = gradleLocalProperties(rootDir, providers).getProperty("key")
-        )
-
-        buildConfigField(
-            type = "String",
-            name = "API_BASE_URL",
-            value = "\"https://api.kinopoisk.dev/v1.4/\""
-        )
-    }
-
-    buildFeatures {
-        buildConfig = true
     }
 
     buildTypes {
@@ -67,6 +50,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
+    implementation(project(":data"))
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
@@ -74,9 +59,6 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.rxjava2)
     implementation(libs.epoxy)
     implementation(libs.epoxy.paging3)
     implementation(libs.lottie)
@@ -87,13 +69,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.gson)
     implementation(libs.zoomage)
-    implementation(libs.okhttp3)
-    implementation(libs.logging.interceptor)
     implementation(libs.paging.rxjava2)
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-    implementation(libs.converter.scalars)
-    implementation(libs.adapter.rxjava2)
     implementation(libs.circleimageview)
     implementation(libs.joda.convert)
     implementation(libs.joda.time)
@@ -106,7 +82,6 @@ dependencies {
     kapt(libs.ksp.hilt)
     kapt(libs.ksp.epoxy)
     kapt(libs.ksp.glide)
-    ksp(libs.ksp.room)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
