@@ -97,7 +97,7 @@ class FiltersFragment : Fragment() {
             )
         }
 
-        val ageList = listOf("G", "PG", "PG-13", "R", "R-17", "Неважно")
+        val ageList = listOf("g", "nc17", "pg", "pg13", "r", "Неважно")
 
         binding.ageRestrictionText.setAdapter(
             NoFilterAdapter(
