@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/background_dialog"
+    android:padding="15dp">
+
+    <TextView
+        android:id="@+id/genres_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:textColor="?colorOnPrimaryContainer"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:fontFamily="@font/inter_semibold"
+        android:text="Фильтр по жанрам"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/genre_recycler"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/genre_recycler"
+        android:layout_width="240dp"
+        tools:listitem="@android:layout/simple_list_item_multiple_choice"
+        android:paddingVertical="10dp"
+        android:layout_height="400dp"
+        app:layout_constraintBottom_toTopOf="@id/genres_no_matter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/genres_title"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/genres_no_matter"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_semibold"
+        android:text="Сбросить"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@id/genres_continue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/genre_recycler" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/genres_continue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_semibold"
+        android:text="Выбрать"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/genres_no_matter" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

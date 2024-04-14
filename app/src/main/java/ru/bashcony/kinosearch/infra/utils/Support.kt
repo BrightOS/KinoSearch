@@ -1,12 +1,17 @@
 package ru.bashcony.kinosearch.infra.utils
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.Rect
 import android.text.format.DateFormat
 import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.recyclerview.widget.RecyclerView
 import java.time.OffsetDateTime
 import java.util.Date
@@ -102,7 +107,7 @@ fun TextView.addOnKeyboardVisibilityListener(
     onKeyboardHidden: () -> Unit,
 ) {
     viewTreeObserver.addOnGlobalLayoutListener {
-        if(rootView.isKeyboardShown()) {
+        if (rootView.isKeyboardShown()) {
             onKeyboardShown()
         } else {
             onKeyboardHidden()
@@ -119,3 +124,27 @@ fun View.isKeyboardShown(): Boolean =
     }.let { heightDiff ->
         heightDiff > SOFT_KEYBOARD_HEIGHT * rootView.resources.displayMetrics.density
     }
+
+@ColorInt
+fun Context.getColorFromAttr(
+    @AttrRes attrColor: Int
+): Int {
+    val typedArray = theme.obtainStyledAttributes(intArrayOf(attrColor))
+    val textColor = typedArray.getColor(0, 0)
+    typedArray.recycle()
+    return textColor
+}
+
+fun <T, K, R> LiveData<T>.combineWith(
+    liveData: LiveData<K>,
+    block: (T?, K?) -> R
+): LiveData<R> {
+    val result = MediatorLiveData<R>()
+    result.addSource(this) {
+        result.value = block(this.value, liveData.value)
+    }
+    result.addSource(liveData) {
+        result.value = block(this.value, liveData.value)
+    }
+    return result
+}

@@ -2,7 +2,6 @@ package ru.bashcony.kinosearch.presentation.search
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -10,29 +9,46 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.badge.BadgeDrawable
-import com.google.android.material.badge.BadgeUtils
-import com.google.android.material.badge.ExperimentalBadgeUtils
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionManager
+import com.google.android.material.transition.MaterialSharedAxis
 import dagger.hilt.android.AndroidEntryPoint
 import ru.bashcony.kinosearch.R
 import ru.bashcony.kinosearch.databinding.FragmentSearchBinding
 import ru.bashcony.kinosearch.infra.utils.addOnKeyboardVisibilityListener
+import ru.bashcony.kinosearch.infra.utils.getColorFromAttr
 import ru.bashcony.kinosearch.infra.utils.registerDataObserver
+import ru.bashcony.kinosearch.presentation.search.adapter.HistoryAdapter
+import ru.bashcony.kinosearch.presentation.search.adapter.MovieSearchAdapter
 
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
+    private lateinit var filtersFragment: FiltersFragment
     private val searchViewModel: SearchViewModel by activityViewModels()
+
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//
+//        exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+//        enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+//        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+//        returnTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+//    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        searchViewModel.setupEverything()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,13 +56,18 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = FragmentSearchBinding.inflate(inflater, container, false).let {
         binding = it
+        filtersFragment = FiltersFragment()
         it.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        searchViewModel.setupSearchMoviesPager()
-        searchViewModel.setupSearchSubject()
+        searchViewModel.loading.observe(viewLifecycleOwner) {
+//            binding.searchIndicator.visibility = if (it)
+//                View.VISIBLE
+//            else
+//                View.GONE
+        }
 
         binding.movieSearchRecycler.apply {
             layoutManager = GridLayoutManager(
@@ -65,15 +86,10 @@ class SearchFragment : Fragment() {
             }
         }
 
-        searchViewModel.loading.observe(viewLifecycleOwner) {
-            binding.searchIndicator.visibility = if (it)
-                View.VISIBLE
-            else
-                View.GONE
-        }
 
         binding.searchText.doAfterTextChanged {
-            searchViewModel.sumbitQuery(it.toString())
+            if (binding.searchText.isEnabled)
+                searchViewModel.sumbitQuery(it.toString())
         }
 
         binding.searchText.setOnFocusChangeListener { v, event ->
@@ -101,6 +117,12 @@ class SearchFragment : Fragment() {
                         R.color.background_search_color_alpha
                 )
             )
+
+            binding.historyLayout.root.visibility =
+                if (v.hasFocus())
+                    View.VISIBLE
+                else
+                    View.GONE
         }
 
         binding.searchText.setOnEditorActionListener { v, actionId, event ->
@@ -112,33 +134,84 @@ class SearchFragment : Fragment() {
             false
         }
 
+        binding.searchButton.setOnClickListener {
+            searchViewModel.forceSubmitQuery(binding.searchText.text.toString())
+            hideKeyboard()
+        }
+
         binding.searchText.addOnKeyboardVisibilityListener(
             onKeyboardShown = {
-                binding.searchText.requestFocus()
+                if (binding.searchText.isEnabled)
+                    binding.searchText.requestFocus()
             },
             onKeyboardHidden = {
-                binding.searchText.clearFocus()
+                if (binding.searchText.isEnabled)
+                    binding.searchText.clearFocus()
             }
         )
 
-        binding.searchText.setCompoundDrawablesWithIntrinsicBounds(
-            ContextCompat.getDrawable(binding.searchText.context, R.drawable.ic_filter),
-            null,
-            ContextCompat.getDrawable(binding.searchText.context, R.drawable.ic_search),
-            null
-        )
-//
-//        BadgeUtils.attachBadgeDrawable(
-//            BadgeDrawable.create(binding.searchText.context).apply {
-//                maxCharacterCount = 1
-//                number = 1
-//                badgeTextColor = Color.WHITE
-//                backgroundColor =
-//                    ContextCompat.getColor(binding.searchText.context, R.color.color_bad)
-//                isVisible = true
-//            },
-//            binding.searchText
-//        )
+        searchViewModel.filteredSearchEnabled.observe(viewLifecycleOwner) {
+            binding.searchText.apply {
+                if (it == true) {
+                    isEnabled = false
+                    isClickable = true
+                    setText("Режим поиска по фильтрам")
+                    setTextColor(context.getColorFromAttr(com.google.android.material.R.attr.colorPrimary))
+                } else {
+                    isEnabled = true
+                    isClickable = false
+                    if (text?.contains("Режим поиска по фильтрам") == true)
+                        setText("")
+                    setTextColor(context.getColorFromAttr(com.google.android.material.R.attr.colorOnSurface))
+                }
+            }
+
+            binding.searchButton.isClickable = it == false
+            binding.searchButton.visibility = if (it == true)
+                View.INVISIBLE
+            else
+                View.VISIBLE
+
+            if (it == true)
+                binding.searchText.setOnClickListener {
+                    searchViewModel.switchFiltersVisibility()
+                }
+            else
+                binding.searchText.setOnClickListener(null)
+        }
+
+        searchViewModel.showFilters.observe(viewLifecycleOwner) {
+            TransitionManager.beginDelayedTransition(
+                binding.root,
+                MaterialSharedAxis(
+                    MaterialSharedAxis.Y,
+                    it == true
+                )
+            )
+
+            binding.filtersContainer.visibility =
+                if (it == false)
+                    View.GONE
+                else
+                    View.VISIBLE
+        }
+
+        binding.filterButton.setOnClickListener {
+            searchViewModel.switchFiltersVisibility()
+        }
+
+        searchViewModel.searchHistory.observe(viewLifecycleOwner) {
+            binding.historyLayout.root.apply {
+                layoutManager = LinearLayoutManager(
+                    context,
+                    LinearLayoutManager.VERTICAL,
+                    false
+                )
+                emptyText = "истории поиска"
+                adapter = getHistoryAdapter()
+            }
+        }
+
     }
 
     private fun hideKeyboard() {
@@ -146,12 +219,26 @@ class SearchFragment : Fragment() {
             .hideSoftInputFromWindow(activity?.currentFocus?.windowToken, 0)
     }
 
+    private fun getHistoryAdapter() =
+        HistoryAdapter(
+            onMovieClick = {
+                findNavController().navigate(
+                    SearchFragmentDirections.actionSearchFragmentToMovieFragment(it.id ?: 1)
+                )
+            },
+            onDeleteClick = {
+                searchViewModel.removeMovieFromHistoryDb(it)
+            }
+        )
+
     private fun getMovieSearchAdapter() =
         MovieSearchAdapter(onMovieClick = {
+            searchViewModel.addMovieToHistoryDb(it)
             findNavController().navigate(
-                SearchFragmentDirections.actionSearchFragmentToMovieFragment(it)
+                SearchFragmentDirections.actionSearchFragmentToMovieFragment(it.id ?: -1)
             )
         }).apply {
+            stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             searchViewModel.doOnMoviesLoaded {
                 submitData(lifecycle, it)
             }

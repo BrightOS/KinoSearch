@@ -38,43 +38,77 @@
         android:background="@drawable/background_search"
         android:backgroundTint="@color/background_search_color_alpha"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@id/search_text" />
+        app:layout_constraintTop_toTopOf="@id/search_card" />
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/search_text"
+    <include
+        android:id="@+id/history_layout"
+        layout="@layout/layout_history"
+        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:background="@drawable/background_search_text"
-        android:backgroundTint="@color/background_search_text_color_alpha"
-        android:drawableStart="@drawable/ic_filter"
-        android:drawableEnd="@drawable/ic_search"
-        android:drawablePadding="5dp"
-        android:fontFamily="@font/inter_regular"
-        android:gravity="center"
-        android:hint="Искать среди фильмов и сериалов"
-        android:imeOptions="actionSearch"
-        android:inputType="text"
-        android:padding="10dp"
-        android:textColor="?colorOnSurface"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_height="match_parent"/>
 
-    <TextView
-        android:layout_width="0dp"
+    <androidx.fragment.app.FragmentContainerView
+        android:name="ru.bashcony.kinosearch.presentation.search.FiltersFragment"
+        android:id="@+id/filters_container"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/search_card"
+        android:layout_width="match_parent"
+        style="@style/Widget.Material3.CardView.Filled"
         android:layout_height="wrap_content"
-        app:layout_constraintDimensionRatio="1:1"
-        android:maxLength="1"
-        android:gravity="center"
-        android:textSize="10sp"
-        android:textColor="?colorOnPrimaryContainer"
-        android:layout_marginStart="24sp"
-        android:layout_marginTop="5dp"
-        android:text="1"
-        android:fontFamily="@font/inter_black"
-        android:background="@drawable/background_badge"
-        app:layout_constraintTop_toTopOf="@id/search_text"
-        app:layout_constraintStart_toStartOf="@id/search_text"/>
+        android:layout_margin="10dp"
+        app:cardBackgroundColor="@color/background_search_text_color_alpha"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/filter_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackgroundBorderless"
+                android:padding="10dp"
+                android:src="@drawable/ic_filter"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/search_text"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="center"
+                android:background="@android:color/transparent"
+                android:hint="Искать среди фильмов и сериалов"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:textColor="?colorOnSurface"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/search_button"
+                app:layout_constraintStart_toEndOf="@id/filter_button"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/search_button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:padding="10dp"
+                android:src="@drawable/ic_search"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

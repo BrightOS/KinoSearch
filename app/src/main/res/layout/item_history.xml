@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
+
+    <ImageView
+        android:id="@+id/history_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:backgroundTint="?selectableItemBackgroundBorderless"
+        android:padding="5dp"
+        android:src="@drawable/ic_close"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/history_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_semibold"
+        android:paddingHorizontal="15dp"
+        android:text="Реинкарнация безработного"
+        android:textColor="?colorOnPrimaryContainer"
+        app:layout_constraintBottom_toTopOf="@id/history_subtitle"
+        app:layout_constraintEnd_toStartOf="@id/history_delete"
+        app:layout_constraintStart_toEndOf="@id/history_cover"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/history_subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/inter_regular"
+        android:paddingHorizontal="15dp"
+        android:text="Реинкарнация безработного"
+        android:textColor="?colorOnPrimaryContainer"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/history_delete"
+        app:layout_constraintStart_toEndOf="@id/history_cover"
+        app:layout_constraintTop_toBottomOf="@id/history_title" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/history_cover"
+        android:layout_width="0dp"
+        android:layout_height="75dp"
+        android:background="?colorSurfaceContainerHighest"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="9:14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/RoundedImageView.10dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

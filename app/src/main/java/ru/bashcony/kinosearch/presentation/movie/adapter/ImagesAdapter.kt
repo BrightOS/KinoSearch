@@ -1,8 +1,12 @@
 package ru.bashcony.kinosearch.presentation.movie.adapter
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -29,10 +33,6 @@ class ImagesAdapter(
                         Glide.with(holder.binding.root.context)
                             .load(R.drawable.ic_person)
                             .dontTransform()
-                    )
-                    .override(
-                        holder.binding.image.measuredWidth,
-                        holder.binding.image.measuredHeight
                     )
                     .transition(DrawableTransitionOptions.with(DrawableAlwaysCrossFadeFactory()))
                     .into(holder.binding.image)

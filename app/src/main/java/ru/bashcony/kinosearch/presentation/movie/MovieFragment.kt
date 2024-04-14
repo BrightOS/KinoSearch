@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.PagerSnapHelper
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -341,6 +344,10 @@ class MovieFragment : Fragment() {
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
+
+            onFlingListener = null
+            LinearSnapHelper().attachToRecyclerView(this)
+
             emptyText = "похожих фильмах"
             adapter = getMoviesListAdapter()
         }
@@ -351,6 +358,10 @@ class MovieFragment : Fragment() {
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
+
+            onFlingListener = null
+            LinearSnapHelper().attachToRecyclerView(this)
+
             emptyText = "сиквелах и приквелах"
             adapter = getMoviesListAdapter()
         }
@@ -361,6 +372,10 @@ class MovieFragment : Fragment() {
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
+
+            onFlingListener = null
+            LinearSnapHelper().attachToRecyclerView(this)
+
             emptyText = "видео"
             adapter = getVideosAdapter()
         }
@@ -372,6 +387,10 @@ class MovieFragment : Fragment() {
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
+
+            onFlingListener = null
+            LinearSnapHelper().attachToRecyclerView(this)
+
             emptyText = "актёрах и съёмочной группе"
             adapter = getPersonsAdapter()
         }
@@ -382,6 +401,10 @@ class MovieFragment : Fragment() {
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
+
+            onFlingListener = null
+            LinearSnapHelper().attachToRecyclerView(this)
+
             emptyText = "рецензиях"
             adapter = getReviewsAdapter()
         }
@@ -392,6 +415,10 @@ class MovieFragment : Fragment() {
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
+
+            onFlingListener = null
+            LinearSnapHelper().attachToRecyclerView(this)
+
             emptyText = "изображениях"
             adapter = getImagesAdapter()
         }
@@ -403,9 +430,6 @@ class MovieFragment : Fragment() {
         }).apply {
             movieViewModel.doOnSeasonsLoaded {
                 submitData(lifecycle, it)
-            }
-            registerDataObserver {
-
             }
         }
 

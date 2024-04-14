@@ -25,4 +25,12 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
+    <style name="SemiTransparentBottomSheetDialogTheme" parent="Theme.Material3.DayNight.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/SemiTransparentBottomSheetStyle</item>
+    </style>
+
+    <style name="SemiTransparentBottomSheetStyle" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="backgroundTint">@color/background_search_color_alpha</item>
+    </style>
 </resources>

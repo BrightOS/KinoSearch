@@ -6,18 +6,28 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import ru.bashcony.kinosearch.domain.movie.entity.MovieEntity
 import ru.bashcony.kinosearch.domain.movie.entity.MoviesEntity
+import ru.bashcony.kinosearch.domain.movie.entity.SearchFilterEntity
+import ru.bashcony.kinosearch.domain.movie.usecase.FilteredSearchMovieUseCase
 import ru.bashcony.kinosearch.domain.movie.usecase.SearchMovieUseCase
 
 class MovieSearchPagingSource constructor(
     private val searchMovieUseCase: SearchMovieUseCase,
-    private val movieQuery: String
+    private val filteredSearchMovieUseCase: FilteredSearchMovieUseCase,
+    private val movieQuery: String? = null,
+    private val filters: Map<SearchFilterEntity, Array<String>?>? = null
 ) : RxPagingSource<Int, MovieEntity>() {
 
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, MovieEntity>> =
-        searchMovieUseCase(movieQuery, 21, params.key ?: 1)
-            .subscribeOn(Schedulers.io())
-            .map { toLoadResult(it, position = params.key ?: 1) }
-            .onErrorReturn { LoadResult.Error(it) }
+        if (filters.isNullOrEmpty())
+            searchMovieUseCase(movieQuery.orEmpty(), 21, params.key ?: 1)
+                .subscribeOn(Schedulers.io())
+                .map { toLoadResult(it, position = params.key ?: 1) }
+                .onErrorReturn { LoadResult.Error(it) }
+        else
+            filteredSearchMovieUseCase(filters, 21, params.key ?: 1)
+                .subscribeOn(Schedulers.io())
+                .map { toLoadResult(it, position = params.key ?: 1) }
+                .onErrorReturn { LoadResult.Error(it) }
 
     private fun toLoadResult(data: MoviesEntity?, position: Int): LoadResult<Int, MovieEntity> =
         LoadResult.Page(
@@ -29,6 +39,7 @@ class MovieSearchPagingSource constructor(
     override fun getRefreshKey(state: PagingState<Int, MovieEntity>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
+            println("Searching for refresh key... ${anchorPage?.prevKey} ${anchorPage?.nextKey}")
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
     }

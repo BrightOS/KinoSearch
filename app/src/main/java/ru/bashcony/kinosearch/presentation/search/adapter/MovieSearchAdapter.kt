@@ -1,4 +1,4 @@
-package ru.bashcony.kinosearch.presentation.search
+package ru.bashcony.kinosearch.presentation.search.adapter
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
@@ -19,7 +19,7 @@ import ru.bashcony.kinosearch.infra.utils.typeToRussian
 import java.util.Locale
 
 class MovieSearchAdapter(
-    private val onMovieClick: (movieId: Int) -> Unit
+    private val onMovieClick: (movieEntity: MovieEntity) -> Unit
 ) : PagingDataAdapter<MovieEntity, MovieSearchAdapter.ViewHolder>(MovieDiffUtil) {
 
     inner class ViewHolder(val binding: ItemSearchMovieBinding) :
@@ -68,7 +68,7 @@ class MovieSearchAdapter(
             }
 
             holder.binding.movieRoot.setOnClickListener { _ ->
-                onMovieClick(it.id ?: -1)
+                onMovieClick(it)
             }
         }
     }

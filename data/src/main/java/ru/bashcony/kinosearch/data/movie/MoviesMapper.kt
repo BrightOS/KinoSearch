@@ -1,6 +1,7 @@
 package ru.bashcony.kinosearch.data.movie
 
 import ru.bashcony.kinosearch.data.movie.MoviesMapper.toEntity
+import ru.bashcony.kinosearch.data.movie.db.MovieLocalModel
 import ru.bashcony.kinosearch.data.movie.remote.dto.FactResponse
 import ru.bashcony.kinosearch.data.movie.remote.dto.ImageResponse
 import ru.bashcony.kinosearch.data.movie.remote.dto.LinkedMovieResponse
@@ -11,6 +12,7 @@ import ru.bashcony.kinosearch.data.movie.remote.dto.PremiereResponse
 import ru.bashcony.kinosearch.data.movie.remote.dto.RatingResponse
 import ru.bashcony.kinosearch.data.movie.remote.dto.SeasonInfoResponse
 import ru.bashcony.kinosearch.data.movie.remote.dto.TrailersResponse
+import ru.bashcony.kinosearch.data.movie.remote.dto.ValueResponse
 import ru.bashcony.kinosearch.data.movie.remote.dto.VideoResponse
 import ru.bashcony.kinosearch.data.movie.remote.dto.VotesResponse
 import ru.bashcony.kinosearch.data.movie.remote.dto.YearsResponse
@@ -25,11 +27,64 @@ import ru.bashcony.kinosearch.domain.movie.entity.PremiereEntity
 import ru.bashcony.kinosearch.domain.movie.entity.RatingEntity
 import ru.bashcony.kinosearch.domain.movie.entity.SeasonInfoEntity
 import ru.bashcony.kinosearch.domain.movie.entity.TrailersEntity
+import ru.bashcony.kinosearch.domain.movie.entity.ValueEntity
 import ru.bashcony.kinosearch.domain.movie.entity.VideoEntity
 import ru.bashcony.kinosearch.domain.movie.entity.VotesEntity
 import ru.bashcony.kinosearch.domain.movie.entity.YearsEntity
 
 object MoviesMapper {
+
+    fun MovieEntity.toLocalModel(): MovieLocalModel {
+        return MovieLocalModel(
+            id ?: 0,
+            poster?.url.orEmpty(),
+            rating?.kp ?: 0.0,
+            name.orEmpty(),
+            alternativeName.orEmpty(),
+            type.orEmpty(),
+            (releaseYears?.getOrNull(0)?.start ?: "$year"),
+            releaseYears?.getOrNull(0)?.end.orEmpty()
+        )
+    }
+
+    fun MovieLocalModel.toEntity(): MovieEntity = MovieEntity(
+        id,
+        type,
+        name,
+        altName,
+        null,
+        null,
+        RatingResponse(kp = rating).toEntity(),
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        listOf(YearsResponse(yearsFrom, yearsTo)).map { it.toEntity() },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    )
+
     fun FactResponse.toEntity() =
         FactEntity(
             value,
@@ -158,5 +213,11 @@ object MoviesMapper {
         YearsEntity(
             start,
             end
+        )
+
+    fun ValueResponse.toEntity() =
+        ValueEntity(
+            name,
+            slug
         )
 }
